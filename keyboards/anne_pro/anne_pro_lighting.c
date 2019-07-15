@@ -172,3 +172,13 @@ void anne_pro_lighting_rate_brightness(uint8_t rate, uint8_t brightness) {
         uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
     }
 }
+
+/* Set Caps Lock red led on */
+void anne_pro_lighting_caps_lock_on(void){
+	uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x01");
+	
+}
+/* Set Caps Lock red led off */
+void anne_pro_lighting_caps_lock_off(void){
+	uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x00");
+}

@@ -49,3 +49,5 @@ void anne_pro_lighting_brightness_next(void);
 void anne_pro_lighting_mode_next(void);
 void anne_pro_lighting_mode(uint8_t mode);
 void anne_pro_lighting_rate_brightness(uint8_t speed, uint8_t brightness);
+void anne_pro_lighting_caps_lock_on(void);
+void anne_pro_lighting_caps_lock_off(void);

@@ -102,12 +102,22 @@ void keyboard_post_init_kb(void) {
     anne_pro_lighting_mode(APL_MODE_RAINBOW);
     /* Set the effect rate to average and the brightness to average */
     anne_pro_lighting_rate_brightness(128, 5);
+	/* Set Caps Lock led to off */
+	anne_pro_lighting_caps_lock_off();
 
     keyboard_post_init_user();
 }
 
 /* Start transmissions when the flag is set */
 void matrix_scan_kb(void) {
+	/* Check changes in Caps Lock, and set led */
+	if (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)){
+	anne_pro_lighting_caps_lock_on();
+	}
+	else{
+	anne_pro_lighting_caps_lock_off();
+	}
+	
     /* Run some update code for the lighting */
     anne_pro_lighting_update();
     /* Run some update code for the bluetooth */
