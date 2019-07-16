@@ -29,7 +29,7 @@ SRC += uart_tx_ringbuf.c anne_pro_lighting.c anne_pro_bluetooth.c
 # Build Options
 #   comment out to disable the options.
 #
-MOUSEKEY_ENABLE = no   # Mouse keys
-EXTRAKEY_ENABLE = yes  # Audio control and System control
-NKRO_ENABLE = yes      # USB Nkey Rollover
-KEYBOARD_SHARED_EP= yes # Add support for Caps Lock led
+MOUSEKEY_ENABLE = no    # Mouse keys
+EXTRAKEY_ENABLE = yes   # Audio control and System control
+NKRO_ENABLE = yes       # USB Nkey Rollover
+KEYBOARD_SHARED_EP= yes # supposed to add support for Caps Lock led on mac, not needed in windows
