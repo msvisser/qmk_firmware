@@ -53,8 +53,10 @@ static UARTConfig led_uart_cfg = {
 /* State of the leds on the keyboard */
 static volatile bool leds_enabled = false;
 
-/* Saves state, this offloads when there has been no changes on Caps Lock*/  
+/* Previous state of caps, this offloads when there has been no changes on Caps Lock*/  
 static volatile bool prev_state_caps_lock = false;
+/* Checks if light mcu has already been woke up, needed for lighting= off + CapsLock=on*/
+static volatile bool not_init = false;
 
 void anne_pro_lighting_init(void) {
     /* Turn on lighting controller */
@@ -131,6 +133,7 @@ void anne_pro_lighting_off(void) {
     uart_tx_ringbuf_write(&led_uart_ringbuf, 4, "\x09\x02\x01\x00");
     uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
     leds_enabled = false;
+	not_init=false;
     /* Sleep the LED controller */
     writePinLow(C15);
 }
@@ -178,28 +181,23 @@ void anne_pro_lighting_rate_brightness(uint8_t rate, uint8_t brightness) {
 
 /* Set Caps Lock red led on */
 void anne_pro_lighting_caps_lock_on(){
-		if(!leds_enabled){
-			/* Wake up the LED controller */
+		if(!leds_enabled && !not_init){
+			/* Wake up the LED controller if off */
 			writePinHigh(C15);
 			chThdSleepMilliseconds(50);
+			not_init=true;
 		}
-		uart_tx_ringbuf_write(&led_uart_ringbuf,3,"\x09\x0c\x0c");
+		uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x01");
 		/* Wait for the message to be sent */
-	    chThdSleepMilliseconds(10);
+	    chThdSleepMilliseconds(10);	
 		
 
 }
 /* Set Caps Lock red led off */
 void anne_pro_lighting_caps_lock_off(){
-		if(!leds_enabled){
-			/* Sleep the LED controller */
-			writePinLow(C15);
-			chThdSleepMilliseconds(50);
-		}
 		uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x00");
 		/* Wait for the message to be sent */
 	    chThdSleepMilliseconds(10);
-		
 		
 }
 /* Handle state of caps lock to avoid using the uart for unnecessary led changes*/
