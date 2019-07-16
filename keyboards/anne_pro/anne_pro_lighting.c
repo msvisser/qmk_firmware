@@ -178,16 +178,28 @@ void anne_pro_lighting_rate_brightness(uint8_t rate, uint8_t brightness) {
 
 /* Set Caps Lock red led on */
 void anne_pro_lighting_caps_lock_on(){
-		uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x01");
+		if(!leds_enabled){
+			/* Wake up the LED controller */
+			writePinHigh(C15);
+			chThdSleepMilliseconds(50);
+		}
+		uart_tx_ringbuf_write(&led_uart_ringbuf,3,"\x09\x0c\x0c");
 		/* Wait for the message to be sent */
 	    chThdSleepMilliseconds(10);
+		
 
 }
 /* Set Caps Lock red led off */
 void anne_pro_lighting_caps_lock_off(){
+		if(!leds_enabled){
+			/* Sleep the LED controller */
+			writePinLow(C15);
+			chThdSleepMilliseconds(50);
+		}
 		uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x00");
 		/* Wait for the message to be sent */
 	    chThdSleepMilliseconds(10);
+		
 		
 }
 /* Handle state of caps lock to avoid using the uart for unnecessary led changes*/
