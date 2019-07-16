@@ -32,4 +32,4 @@ SRC += uart_tx_ringbuf.c anne_pro_lighting.c anne_pro_bluetooth.c
 MOUSEKEY_ENABLE = no   # Mouse keys
 EXTRAKEY_ENABLE = yes  # Audio control and System control
 NKRO_ENABLE = yes      # USB Nkey Rollover
-KEYBOARD_SHARED_EP=yes # Add support for Caps Lock led
+KEYBOARD_SHARED_EP= yes # Add support for Caps Lock led

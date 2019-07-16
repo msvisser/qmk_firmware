@@ -24,6 +24,9 @@
 static bool nkro_enabled_last = false;
 #endif
 static host_driver_t *host_driver_last;
+   
+/* Saves state, this offloads when there has been no changes on Caps Lock*/  
+static volatile bool prev_state_caps_lock = false;
 
 /* Process the Anne Pro custom keycodes */
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
@@ -99,24 +102,29 @@ void keyboard_post_init_kb(void) {
     /* Turn on the lighting */
     anne_pro_lighting_on();
     /* Set the theme to rainbow */
-    anne_pro_lighting_mode(APL_MODE_RAINBOW);
+    anne_pro_lighting_mode(APL_MODE_YELLOW);
     /* Set the effect rate to average and the brightness to average */
     anne_pro_lighting_rate_brightness(128, 5);
-	/* Set Caps Lock led to off */
-	anne_pro_lighting_caps_lock_off();
-
     keyboard_post_init_user();
 }
 
 /* Start transmissions when the flag is set */
 void matrix_scan_kb(void) {
 	/* Check changes in Caps Lock, and set led */
+	
 	if (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)){
-	anne_pro_lighting_caps_lock_on();
+		if(prev_state_caps_lock == false){
+			anne_pro_lighting_caps_lock_on();
+			prev_state_caps_lock = true;
+		}
 	}
 	else{
-	anne_pro_lighting_caps_lock_off();
+		if(prev_state_caps_lock == true){
+			anne_pro_lighting_caps_lock_off();
+			prev_state_caps_lock = false;
+		}
 	}
+	
 	
     /* Run some update code for the lighting */
     anne_pro_lighting_update();
@@ -125,4 +133,7 @@ void matrix_scan_kb(void) {
 
     /* Run matrix_scan_user code */
     matrix_scan_user();
+
+	
+	
 }
