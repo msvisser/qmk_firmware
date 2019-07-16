@@ -25,7 +25,6 @@ static bool nkro_enabled_last = false;
 #endif
 static host_driver_t *host_driver_last;
    
-
 /* Process the Anne Pro custom keycodes */
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     /* Update the key status for the reactive effects */
@@ -100,7 +99,7 @@ void keyboard_post_init_kb(void) {
     /* Turn on the lighting */
     anne_pro_lighting_on();
     /* Set the theme to rainbow */
-    anne_pro_lighting_mode(APL_MODE_YELLOW);
+    anne_pro_lighting_mode(APL_MODE_RAINBOW);
     /* Set the effect rate to average and the brightness to average */
     anne_pro_lighting_rate_brightness(128, 5);
     keyboard_post_init_user();
