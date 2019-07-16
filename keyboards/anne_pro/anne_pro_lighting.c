@@ -53,6 +53,9 @@ static UARTConfig led_uart_cfg = {
 /* State of the leds on the keyboard */
 static volatile bool leds_enabled = false;
 
+/* Saves state, this offloads when there has been no changes on Caps Lock*/  
+static volatile bool prev_state_caps_lock = false;
+
 void anne_pro_lighting_init(void) {
     /* Turn on lighting controller */
     writePinLow(C15);
@@ -185,5 +188,19 @@ void anne_pro_lighting_caps_lock_off(){
 		uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x00");
 		/* Wait for the message to be sent */
 	    chThdSleepMilliseconds(10);
-	
+		
 }
+/* Handle state of caps lock to avoid using the uart for unnecessary led changes*/
+void anne_pro_caps_lock_update(bool state){
+	if (state && !prev_state_caps_lock){
+		anne_pro_lighting_caps_lock_on();
+		prev_state_caps_lock = true;
+	}
+	else if(!state && prev_state_caps_lock){
+		anne_pro_lighting_caps_lock_off();
+		prev_state_caps_lock = false;
+	}
+	
+}		
+	
+
