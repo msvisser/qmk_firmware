@@ -1,4 +1,5 @@
-This keymap was made with love to make Anne Pro 2 keys style. Supports Windows, some os-specific features can not work with different os like OSX.
+This keymap was made with love to make Anne Pro 2 keys style and add some features.
+Supports Windows, some os-specific features can not work with different os like OSX.
 Keymap will be synced with all changes which dear msvisser will make.
 
 Keys:
