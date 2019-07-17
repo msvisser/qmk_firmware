@@ -6,7 +6,7 @@ Keys:
 ANNE+0 - off/on the backlight
 ANNE+9 - switch the backlight profile
 ANNE + =/+ - increases brightness
-ANNE + - -/_ - changes backlight speed
+ANNE + -/_ - changes backlight speed
 ANNE+TAB - reset the keyboard (instead of button on the back side)
 ANNE+TAB+hold ESC - enter to the bootloader (DFU) mode
 
