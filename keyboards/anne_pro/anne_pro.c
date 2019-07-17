@@ -173,7 +173,7 @@ void keyboard_post_init_kb(void) {
     /* Set the theme to rainbow */
     anne_pro_lighting_mode(APL_MODE_RAINBOW);
     /* Set the effect rate to average and the brightness to average */
-    anne_pro_lighting_rate_brightness(128, 5);
+    anne_pro_lighting_rate_brightness(128, 10);
 
     keyboard_post_init_user();
 }
