@@ -192,3 +192,35 @@ void anne_pro_lighting_set_keys(uint8_t keys, uint8_t *payload) {
     uart_tx_ringbuf_write(&led_uart_ringbuf, 5, buf);
     uart_tx_ringbuf_write(&led_uart_ringbuf, 5 * keys, payload);
 }
+
+/* Set Caps Lock red led on */
+void anne_pro_lighting_caps_lock_on(){
+		if(!leds_enabled && !not_init){
+			/* Wake up the LED controller if off */
+			writePinHigh(C15);
+			chThdSleepMilliseconds(50);
+			not_init=true;
+		}
+		if(leds_enabled) // solves problems when LT(1,KC_CAPS) is used in keymap(Tap = caps, Hold = MO(1))
+			anne_pro_lighting_update();
+		uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x01");
+		uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
+		prev_state_caps_lock = true;
+}
+/* Set Caps Lock red led off */
+void anne_pro_lighting_caps_lock_off(){
+		if(leds_enabled) // solves problems when LT(1,KC_CAPS) is used in keymap(Tap = caps, Hold = MO(1))
+			anne_pro_lighting_update();
+		uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x00");
+		uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);			
+		prev_state_caps_lock = false;		
+}
+/* Handle state of caps lock to avoid using the uart for unnecessary led changes*/
+void anne_pro_caps_lock_update(bool state){
+	if (state && prev_state_caps_lock==false){
+		anne_pro_lighting_caps_lock_on();
+	}
+	else if(!state && prev_state_caps_lock==true){
+		anne_pro_lighting_caps_lock_off();	
+	}	
+}		
