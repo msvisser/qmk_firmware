@@ -52,6 +52,10 @@ static UARTConfig led_uart_cfg = {
 
 /* State of the leds on the keyboard */
 static volatile bool leds_enabled = false;
+/* Previous state of caps, this offloads when there has been no changes on Caps Lock*/  
+static volatile bool prev_state_caps_lock = false;
+/* Checks if light mcu has already been woke up, needed for lighting= off + CapsLock=on*/
+static volatile bool not_init = false;
 
 void anne_pro_lighting_init(void) {
     /* Turn on lighting controller */
