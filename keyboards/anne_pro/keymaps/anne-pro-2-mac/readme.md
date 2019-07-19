@@ -1,9 +1,10 @@
 # Anne Pro 2 MAC layout
 
-This layout adds TAP, Media Keys features and AP2-like backlight control. 
+### This layout adds TAP, Media Keys features and AP2-like backlight control. 
+### Maintainer: [angelokofficial](github.com/angelokofficial)
 
 
-*Keys:*
+**Keys:**
 
 ANNE+0 - off/on the backlight
 
@@ -18,7 +19,7 @@ ANNE+ESC - reset the keyboard (instead of button on the back side)
 ANNE+ESC+hold ESC - enter to the bootloader (DFU) mode
 
 
-*TAP:*
+**TAP:**
 
 Right Shift - up arrow
 
@@ -29,7 +30,7 @@ FN - left arrow
 Right CTRL - right arrow 
 
 
-*Bluetooth:*
+**Bluetooth:**
 
 Fn+B - enter BT mode
 
@@ -42,7 +43,7 @@ Fn+B - enter BT mode
 1,2,3,4 - should work as bt profiles for switch among connected devices
 
 
-*Media keys:*
+**Media keys:**
 
 ANNE+1 - stop
 
@@ -60,4 +61,5 @@ ANNE+7 - mute/unmute volume
 
 
 All other keys remain on their own places.
+
 To compile: `make anne_pro:<your_keymap>`
