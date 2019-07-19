@@ -54,4 +54,3 @@ void anne_pro_lighting_rate_brightness(uint8_t speed, uint8_t brightness);
 void anne_pro_lighting_set_keys(uint8_t keys, uint8_t *payload);
 void anne_pro_lighting_caps_lock_on(void);
 void anne_pro_lighting_caps_lock_off(void);
-void anne_pro_caps_lock_update(bool state);

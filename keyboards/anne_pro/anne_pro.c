@@ -180,18 +180,10 @@ void keyboard_post_init_kb(void) {
 
 /* Start transmissions when the flag is set */
 void matrix_scan_kb(void) {
-    /* Check changes in Caps Lock, and set led */	
-	if (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)){
-		anne_pro_caps_lock_update(true);
-	}
-	else{
-		anne_pro_caps_lock_update(false);
-	}
     /* Run some update code for the lighting */
     anne_pro_lighting_update();
     /* Run some update code for the bluetooth */
     anne_pro_bluetooth_update();
-
     /* Run matrix_scan_user code */
     matrix_scan_user();
 }

@@ -102,6 +102,21 @@ void anne_pro_lighting_update(void) {
     if (!uart_tx_ringbuf_empty(&led_uart_ringbuf)) {
         uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
     }
+	   /* Check changes in Caps Lock, and set led */	
+	if (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)){
+		/* Handle state of caps lock to avoid using the uart for unnecessary led changes*/
+		if(state && prev_state_caps_lock==false){
+		anne_pro_lighting_caps_lock_on();
+		prev_state_caps_lock = true;
+		}
+	}
+	else{
+		/* Handle state of caps lock to avoid using the uart for unnecessary led changes*/
+		if(!state && prev_state_caps_lock==true){
+		anne_pro_lighting_caps_lock_off();
+		prev_state_caps_lock = false;
+		}
+	}
 }
 
 /* Toggle the lighting on/off */
@@ -132,6 +147,7 @@ void anne_pro_lighting_off(void) {
     uart_tx_ringbuf_write(&led_uart_ringbuf, 4, "\x09\x02\x01\x00");
     uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
     leds_enabled = false;
+	not_init=false;
     /* Sleep the LED controller */
     writePinLow(C15);
 }
@@ -199,32 +215,23 @@ void anne_pro_lighting_set_keys(uint8_t keys, uint8_t *payload) {
 
 /* Set Caps Lock red led on */
 void anne_pro_lighting_caps_lock_on(){
-		if(!leds_enabled && !not_init){
-			/* Wake up the LED controller if off */
-			writePinHigh(C15);
-			chThdSleepMilliseconds(50);
-			not_init=true;
-		}
-		if(leds_enabled) // solves problems when LT(1,KC_CAPS) is used in keymap(Tap = caps, Hold = MO(1))
-			anne_pro_lighting_update();
-		uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x01");
-		uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
-		prev_state_caps_lock = true;
+	/* If leds disabled, and not already initiated*/
+	if(!leds_enabled && !not_init){
+		/* Wake up the LED controller if off */
+		writePinHigh(C15);
+		/* Wait till its woke up */
+		chThdSleepMilliseconds(50);
+		not_init=true;
+	}
+	uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x01");
+	/* Sends command right away, cant wait till buffer is full as need the led on now */
+	uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
+		
 }
 /* Set Caps Lock red led off */
 void anne_pro_lighting_caps_lock_off(){
-		if(leds_enabled) // solves problems when LT(1,KC_CAPS) is used in keymap(Tap = caps, Hold = MO(1))
-			anne_pro_lighting_update();
-		uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x00");
-		uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);			
-		prev_state_caps_lock = false;		
+	uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x00");
+	/* Sends command right away, cant wait till buffer is full as need the led off now */
+	uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);				
 }
-/* Handle state of caps lock to avoid using the uart for unnecessary led changes*/
-void anne_pro_caps_lock_update(bool state){
-	if (state && prev_state_caps_lock==false){
-		anne_pro_lighting_caps_lock_on();
-	}
-	else if(!state && prev_state_caps_lock==true){
-		anne_pro_lighting_caps_lock_off();	
-	}	
-}		
+
