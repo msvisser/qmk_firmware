@@ -105,14 +105,14 @@ void anne_pro_lighting_update(void) {
 	   /* Check changes in Caps Lock, and set led */	
 	if (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)){
 		/* Handle state of caps lock to avoid using the uart for unnecessary led changes*/
-		if(state && prev_state_caps_lock==false){
+		if(!prev_state_caps_lock){
 		anne_pro_lighting_caps_lock_on();
 		prev_state_caps_lock = true;
 		}
 	}
 	else{
 		/* Handle state of caps lock to avoid using the uart for unnecessary led changes*/
-		if(!state && prev_state_caps_lock==true){
+		if(prev_state_caps_lock){
 		anne_pro_lighting_caps_lock_off();
 		prev_state_caps_lock = false;
 		}
