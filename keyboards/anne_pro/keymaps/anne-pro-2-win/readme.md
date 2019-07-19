@@ -1,6 +1,6 @@
-# Anne Pro 2 Windows layout  
+# Anne Pro 2 Windows keymap  
 
-### This layout adds TAP, Media Keys features and AP2-like backlight control.  
+### This keymap adds TAP, Media Keys features and AP2-like backlight control.  
 ### Maintainer: [angelokofficial](https://github.com/angelokofficial)
 
 
