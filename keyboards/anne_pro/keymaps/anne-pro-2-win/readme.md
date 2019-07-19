@@ -1,7 +1,7 @@
 # Anne Pro 2 Windows layout  
 
 ### This layout adds TAP, Media Keys features and AP2-like backlight control.  
-### Maintainer: [angelokofficial](github.com/angelokofficial)
+### Maintainer: [angelokofficial](https://github.com/angelokofficial)
 
 
 __Keys:__
