@@ -184,6 +184,7 @@ void matrix_scan_kb(void) {
     anne_pro_lighting_update();
     /* Run some update code for the bluetooth */
     anne_pro_bluetooth_update();
+    
     /* Run matrix_scan_user code */
     matrix_scan_user();
 }
