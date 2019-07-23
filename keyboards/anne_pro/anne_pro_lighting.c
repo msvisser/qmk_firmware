@@ -55,7 +55,7 @@ static volatile bool leds_enabled = false;
 /* Previous state of caps, this offloads when there has been no changes on Caps Lock*/  
 static volatile bool prev_state_caps_lock = false;
 /* Checks if light mcu has already been woke up, needed for lighting= off + CapsLock=on*/
-static volatile bool not_init = false;
+static volatile bool is_init = false;
 
 void anne_pro_lighting_init(void) {
     /* Turn on lighting controller */
@@ -137,6 +137,7 @@ void anne_pro_lighting_on(void) {
     uart_tx_ringbuf_write(&led_uart_ringbuf, 3, "\x09\x01\x01");
     uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
     leds_enabled = true;
+	is_init=true;
     /* Wait for the message to be sent */
     chThdSleepMilliseconds(10);
 }
@@ -144,12 +145,14 @@ void anne_pro_lighting_on(void) {
 /* Turn the lighting off */
 void anne_pro_lighting_off(void) {
     /* Send turn light off command */
-    uart_tx_ringbuf_write(&led_uart_ringbuf, 4, "\x09\x02\x01\x00");
+	uart_tx_ringbuf_write(&led_uart_ringbuf, 4, "\x09\x02\x01\x00");
     uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
     leds_enabled = false;
-	not_init=false;
+	if(!prev_state_caps_lock){// only sleep if caps is not beeing used
     /* Sleep the LED controller */
     writePinLow(C15);
+	is_init=false;
+	}
 }
 
 /* Is the lighting enabled? */
@@ -216,21 +219,21 @@ void anne_pro_lighting_set_keys(uint8_t keys, uint8_t *payload) {
 /* Set Caps Lock red led on */
 void anne_pro_lighting_caps_lock_on(){
 	/* If leds disabled, and not already initiated*/
-	if(!leds_enabled && !not_init){
+	if(!leds_enabled && !is_init){
 		/* Wake up the LED controller if off */
 		writePinHigh(C15);
 		/* Wait till its woke up */
 		chThdSleepMilliseconds(50);
-		not_init=true;
+		is_init=true;
 	}
-	uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x01");
+	uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x02\x0c\x01");
 	/* Sends command right away, cant wait till buffer is full as need the led on now */
 	uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);
 		
 }
 /* Set Caps Lock red led off */
 void anne_pro_lighting_caps_lock_off(){
-	uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x0c\x0c\x00");
+	uart_tx_ringbuf_write(&led_uart_ringbuf,4,"\x09\x02\x0c\x00");
 	/* Sends command right away, cant wait till buffer is full as need the led off now */
 	uart_tx_ringbuf_start_transmission(&led_uart_ringbuf);				
 }
