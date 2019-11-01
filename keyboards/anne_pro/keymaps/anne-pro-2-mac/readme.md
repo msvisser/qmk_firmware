@@ -20,6 +20,9 @@ ANNE - down arrow
 FN - left arrow
 Right CTRL - right arrow
 
+__Magic TAP:__
+
+Caps lock - FN
 
 __Bluetooth:__
 
