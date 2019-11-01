@@ -1,6 +1,6 @@
 # Anne Pro 2 Windows keymap  
 
-### This keymap adds TAP, Media Keys features and AP2-like backlight control.  
+### This keymap adds TAP ,AP2-like Magic TAP, Media Keys features and AP2-like backlight control.  
 ### Maintainer: [angelokofficial](https://github.com/angelokofficial)
 
 
@@ -20,6 +20,9 @@ ANNE - down arrow
 FN - left arrow  
 Right CTRL - right arrow  
 
+__Magic TAP:__
+
+Caps lock - FN
 
 __Bluetooth:__
 
